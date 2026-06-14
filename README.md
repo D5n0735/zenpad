@@ -6,11 +6,12 @@ ZenPad는 원고 집필이나 세계관 설정처럼 **챕터 단위의 긴 글*
 
 ## 📸 미리보기
 
-| 다크 모드 (나눔명조) | 라이트 모드 (고운바탕) |
+| 다크 모드 | 라이트 모드 |
 |---|---|
-| ![ZenPad 다크 모드](screenshots/zenpad-dark.png) | ![ZenPad 라이트 모드](screenshots/zenpad-light.png) |
+| ![ZenPad 다크 모드](screenshots/다크01.png) | ![ZenPad 라이트 모드](screenshots/라이트02.png) |
+| ![ZenPad 다크 모드](screenshots/다크02.png) | ![ZenPad 라이트 모드](screenshots/라이트03.png) |
 
-> 커스텀 타이틀 바, 유리 불투명도 다이얼, 폰트·비율 프리셋, 실시간 글자 수 상태 바.
+> 커스텀 타이틀 바, 유리 불투명도 다이얼, 폰트·노트 양식, 실시간 글자 수 상태 바.
 
 ## ✨ 주요 기능
 
