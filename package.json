@@ -26,9 +26,19 @@
     "wait-on": "^8.0.1"
   },
   "dependencies": {
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/dancing-script": "^5.2.8",
+    "@fontsource/eb-garamond": "^5.2.7",
     "@fontsource/gowun-batang": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/lora": "^5.2.8",
+    "@fontsource/merriweather": "^5.2.11",
     "@fontsource/nanum-myeongjo": "^5.2.11",
     "@fontsource/noto-sans-kr": "^5.2.9",
+    "@fontsource/playfair-display": "^5.2.8",
+    "@fontsource/roboto": "^5.2.10",
+    "@fontsource/source-serif-4": "^5.2.9",
     "framer-motion": "^11.13.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

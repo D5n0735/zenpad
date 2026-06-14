@@ -31,6 +31,10 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [chromeVisible, setChromeVisible] = useState(true)
   const [editorSize, setEditorSize] = useState({ width: '100%', height: '100%' })
+  const [editorRatio, setEditorRatio] = useState(null)
+  const [noteStyle, setNoteStyle] = useState(saved.noteStyle || 'plain')
+  const [ratioEnabled, setRatioEnabled] = useState(saved.ratioEnabled ?? false)
+  const [customRatios, setCustomRatios] = useState(saved.customRatios || [])
 
   const editorRef = useRef(null)
   const toastTimer = useRef(null)
@@ -44,8 +48,11 @@ export default function App() {
   }, [dark])
 
   useEffect(() => {
-    localStorage.setItem(STORE_KEY, JSON.stringify({ dark, font, fontSize, background, glassOpacity }))
-  }, [dark, font, fontSize, background, glassOpacity])
+    localStorage.setItem(
+      STORE_KEY,
+      JSON.stringify({ dark, font, fontSize, background, glassOpacity, noteStyle, ratioEnabled, customRatios })
+    )
+  }, [dark, font, fontSize, background, glassOpacity, noteStyle, ratioEnabled, customRatios])
 
   const flash = useCallback((message) => {
     setToast(message)
@@ -133,9 +140,32 @@ export default function App() {
     flash('새 문서')
   }, [dirty, flash])
 
-  const applyRatio = useCallback((key) => {
-    if (key === '16:9') setEditorSize({ width: '960px', height: '540px' })
-    else setEditorSize({ width: '396px', height: '616px' })
+  const applyRatio = useCallback((w, h) => {
+    setEditorRatio({ w, h })
+  }, [])
+
+  const handleResize = useCallback((size) => {
+    setEditorRatio(null)
+    setEditorSize(size)
+  }, [])
+
+  const addRatio = useCallback((w, h) => {
+    if (!w || !h) return
+    setCustomRatios((prev) => {
+      if (prev.some((r) => r.w === w && r.h === h)) return prev
+      return [...prev, { id: `${w}:${h}:${Date.now()}`, w, h }]
+    })
+  }, [])
+
+  const removeRatio = useCallback((id) => {
+    setCustomRatios((prev) => prev.filter((r) => r.id !== id))
+  }, [])
+
+  const toggleRatioEnabled = useCallback(() => {
+    setRatioEnabled((v) => {
+      if (v) setEditorRatio(null)
+      return !v
+    })
   }, [])
 
   const handlePickBackground = useCallback(async () => {
@@ -190,9 +220,12 @@ export default function App() {
           fontSize={fontSize}
           dark={dark}
           glassOpacity={glassOpacity}
+          noteStyle={noteStyle}
+          hasBackground={!!background}
           width={editorSize.width}
           height={editorSize.height}
-          onResize={setEditorSize}
+          aspectRatio={editorRatio ? `${editorRatio.w} / ${editorRatio.h}` : null}
+          onResize={handleResize}
           onFocus={() => {
             editorFocused.current = true
           }}
@@ -219,7 +252,14 @@ export default function App() {
           onChangeFontSize={setFontSize}
           glassOpacity={glassOpacity}
           onChangeGlass={setGlassOpacity}
+          noteStyle={noteStyle}
+          onChangeNoteStyle={setNoteStyle}
+          ratioEnabled={ratioEnabled}
+          onToggleRatioEnabled={toggleRatioEnabled}
+          customRatios={customRatios}
           onApplyRatio={applyRatio}
+          onAddRatio={addRatio}
+          onRemoveRatio={removeRatio}
           onNew={handleNew}
           onPickBackground={handlePickBackground}
           onClearBackground={() => setBackground('')}

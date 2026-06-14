@@ -1,5 +1,21 @@
+const FONT_LABELS = {
+  myeongjo: '나눔명조',
+  gowun: '고운바탕',
+  gothic: '노토 고딕',
+  inter: 'Inter',
+  roboto: 'Roboto',
+  lora: 'Lora',
+  garamond: 'EB Garamond',
+  playfair: 'Playfair Display',
+  merriweather: 'Merriweather',
+  sourceserif: 'Source Serif',
+  caveat: 'Caveat',
+  dancing: 'Dancing Script',
+  jetbrains: 'JetBrains Mono'
+}
+
 export default function StatusBar({ withSpaces, withoutSpaces, lines, font }) {
-  const fontLabel = { myeongjo: '나눔명조', gowun: '고운바탕', gothic: '노토 고딕' }[font] || '나눔명조'
+  const fontLabel = FONT_LABELS[font] || '나눔명조'
 
   return (
     <div className="no-drag flex select-none items-center justify-between px-7 py-2.5 text-[11px] text-zinc-600 dark:text-zinc-300">
