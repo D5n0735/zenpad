@@ -6,12 +6,12 @@ ZenPad는 원고 집필이나 세계관 설정처럼 **챕터 단위의 긴 글*
 
 ## 📸 미리보기
 
-| 다크 모드 | 라이트 모드 |
+| 다크 작업 화면 | 라이트 작업 화면 |
 |---|---|
-| ![ZenPad 다크 모드](screenshots/다크01.png) | ![ZenPad 라이트 모드](screenshots/라이트02.png) |
-| ![ZenPad 다크 모드](screenshots/다크02.png) | ![ZenPad 라이트 모드](screenshots/라이트03.png) |
+| ![ZenPad v1.0.1 다크 작업 화면](screenshots/zenpad-v101-dark-workspace.png) | ![ZenPad v1.0.1 라이트 작업 화면](screenshots/zenpad-v101-light-workspace.png) |
+| ![ZenPad v1.0.1 다크 미리보기](screenshots/zenpad-v101-dark-preview.png) | ![ZenPad v1.0.1 라이트 미리보기](screenshots/zenpad-v101-light-preview.png) |
 
-> 작품/챕터 관리, 커스텀 타이틀 바, 자동 백업, 본문 검색, 마크다운 미리보기, 집필 통계, 유리 불투명도 다이얼.
+> v1.0.1 기준 미리보기: 작품/챕터 관리, 라이트·다크 테마, 마크다운 미리보기, 본문 검색, 노트 양식, 집필 통계, 안전 저장 흐름.
 
 ## ✨ 주요 기능
 
