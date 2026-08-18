@@ -61,6 +61,72 @@ textarea::placeholder {
   opacity: 0.45;
 }
 
+.markdown-preview h1 {
+  margin: 0 0 1.1em;
+  font-size: 1.65em;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.markdown-preview h2 {
+  margin: 1.5em 0 0.7em;
+  font-size: 1.32em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.markdown-preview h3 {
+  margin: 1.25em 0 0.6em;
+  font-size: 1.12em;
+  font-weight: 700;
+}
+
+.markdown-preview p {
+  margin: 0 0 0.9em;
+}
+
+.markdown-preview ul {
+  margin: 0 0 1em 1.1em;
+  padding: 0;
+  list-style: disc;
+}
+
+.markdown-preview li {
+  margin: 0.2em 0;
+}
+
+.markdown-preview blockquote {
+  margin: 1em 0;
+  border-left: 3px solid rgb(251 113 133 / 0.75);
+  padding-left: 0.9em;
+  color: rgb(113 113 122);
+}
+
+.dark .markdown-preview blockquote {
+  color: rgb(212 212 216);
+}
+
+.markdown-preview code {
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.08);
+  padding: 0.1em 0.28em;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
+}
+
+.markdown-preview pre {
+  overflow: auto;
+  border-radius: 12px;
+  background: rgb(24 24 27 / 0.86);
+  padding: 1em;
+  color: rgb(244 244 245);
+}
+
+.markdown-preview pre code {
+  background: transparent;
+  padding: 0;
+}
+
 @keyframes floatIn {
   from {
     opacity: 0;

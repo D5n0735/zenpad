@@ -65,13 +65,23 @@ export default function Toolbar({
   onApplyRatio,
   onAddRatio,
   onRemoveRatio,
+  sidebarVisible,
+  onToggleSidebar,
+  previewVisible,
+  onTogglePreview,
+  searchVisible,
+  onToggleSearch,
+  autosaveEnabled,
+  onToggleAutosave,
   onNew,
   onPickBackground,
   onClearBackground,
   hasBackground,
   onSave,
   onSaveAs,
-  onOpen
+  onOpen,
+  onExportMarkdown,
+  onExportHtml
 }) {
   return (
     <div className="no-drag flex shrink-0 flex-wrap items-center gap-2 px-4 pb-3 pt-1">
@@ -80,12 +90,20 @@ export default function Toolbar({
         <span>새 글</span>
       </ToolButton>
 
+      <ToolButton onClick={onToggleSidebar} label="작품" active={sidebarVisible}>
+        <LibraryIcon />
+        <span>작품</span>
+      </ToolButton>
+
       <Popover hover align="left" panelWidth="w-44" trigger={<FileIcon />} triggerLabel="파일">
         {({ close }) => (
           <div className="p-1">
             <MenuItem onClick={() => { onOpen(); close() }} icon={<FolderIcon />} label="불러오기" hint="Ctrl+O" />
             <MenuItem onClick={() => { onSave(); close() }} icon={<SaveIcon />} label="저장" hint="Ctrl+S" />
             <MenuItem onClick={() => { onSaveAs(); close() }} icon={<SaveAsIcon />} label="다른 이름으로 저장" hint="Ctrl+⇧S" />
+            <DividerLine />
+            <MenuItem onClick={() => { onExportMarkdown(); close() }} icon={<MarkdownIcon />} label="Markdown 내보내기" />
+            <MenuItem onClick={() => { onExportHtml(); close() }} icon={<HtmlIcon />} label="HTML 내보내기" />
           </div>
         )}
       </Popover>
@@ -143,6 +161,16 @@ export default function Toolbar({
 
       <GlassDial value={glassOpacity} onChange={onChangeGlass} />
 
+      <ToolButton onClick={onTogglePreview} label="Markdown 미리보기" active={previewVisible}>
+        <PreviewIcon />
+        <span>미리보기</span>
+      </ToolButton>
+
+      <ToolButton onClick={onToggleSearch} label="찾기" active={searchVisible}>
+        <SearchIcon />
+        <span>찾기</span>
+      </ToolButton>
+
       <Popover align="left" panelWidth="w-60" trigger={<GearIcon />} triggerLabel="옵션">
         {() => (
           <OptionsPanel
@@ -152,6 +180,8 @@ export default function Toolbar({
             onApplyRatio={onApplyRatio}
             onAddRatio={onAddRatio}
             onRemoveRatio={onRemoveRatio}
+            autosaveEnabled={autosaveEnabled}
+            onToggleAutosave={onToggleAutosave}
           />
         )}
       </Popover>
@@ -243,7 +273,16 @@ function MenuItem({ onClick, icon, label, hint, disabled }) {
   )
 }
 
-function OptionsPanel({ ratioEnabled, onToggleRatioEnabled, customRatios, onApplyRatio, onAddRatio, onRemoveRatio }) {
+function OptionsPanel({
+  ratioEnabled,
+  onToggleRatioEnabled,
+  customRatios,
+  onApplyRatio,
+  onAddRatio,
+  onRemoveRatio,
+  autosaveEnabled,
+  onToggleAutosave
+}) {
   const [w, setW] = useState('16')
   const [h, setH] = useState('9')
 
@@ -257,21 +296,20 @@ function OptionsPanel({ ratioEnabled, onToggleRatioEnabled, customRatios, onAppl
     <div className="p-2.5">
       <button
         type="button"
-        onClick={onToggleRatioEnabled}
+        onClick={onToggleAutosave}
         className="flex w-full items-center justify-between rounded-lg px-1 py-1 text-[13px] text-zinc-700 dark:text-zinc-200"
       >
+        <span>자동 저장</span>
+        <ToggleKnob enabled={autosaveEnabled} />
+      </button>
+
+      <button
+        type="button"
+        onClick={onToggleRatioEnabled}
+        className="mt-1 flex w-full items-center justify-between rounded-lg px-1 py-1 text-[13px] text-zinc-700 dark:text-zinc-200"
+      >
         <span>고정 비율 활성화</span>
-        <span
-          className={`relative h-5 w-9 rounded-full transition-colors ${
-            ratioEnabled ? 'bg-rose-400/80' : 'bg-black/15 dark:bg-white/15'
-          }`}
-        >
-          <motion.span
-            layout
-            transition={{ type: 'spring', stiffness: 500, damping: 32 }}
-            className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow ${ratioEnabled ? 'right-0.5' : 'left-0.5'}`}
-          />
-        </span>
+        <ToggleKnob enabled={ratioEnabled} />
       </button>
 
       <AnimatePresence initial={false}>
@@ -342,6 +380,22 @@ function OptionsPanel({ ratioEnabled, onToggleRatioEnabled, customRatios, onAppl
         )}
       </AnimatePresence>
     </div>
+  )
+}
+
+function ToggleKnob({ enabled }) {
+  return (
+    <span
+      className={`relative h-5 w-9 rounded-full transition-colors ${
+        enabled ? 'bg-rose-400/80' : 'bg-black/15 dark:bg-white/15'
+      }`}
+    >
+      <motion.span
+        layout
+        transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow ${enabled ? 'right-0.5' : 'left-0.5'}`}
+      />
+    </span>
   )
 }
 
@@ -557,14 +611,16 @@ function ThemeToggle({ dark, onToggle }) {
   )
 }
 
-function ToolButton({ children, onClick, label }) {
+function ToolButton({ children, onClick, label, active }) {
   return (
     <motion.button
       type="button"
       aria-label={label}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className="flex h-9 items-center gap-1.5 rounded-lg border border-black/10 bg-white/40 px-3 text-[13px] text-zinc-700 shadow-sm backdrop-blur transition-colors hover:bg-white/60 dark:border-white/10 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-white/10"
+      className={`flex h-9 items-center gap-1.5 rounded-lg border border-black/10 px-3 text-[13px] text-zinc-700 shadow-sm backdrop-blur transition-colors hover:bg-white/60 dark:border-white/10 dark:text-zinc-200 dark:hover:bg-white/10 ${
+        active ? 'bg-rose-400/20 text-rose-600 dark:bg-rose-400/20 dark:text-rose-100' : 'bg-white/40 dark:bg-white/5'
+      }`}
     >
       {children}
     </motion.button>
@@ -573,6 +629,10 @@ function ToolButton({ children, onClick, label }) {
 
 function Divider() {
   return <div className="mx-1 h-6 w-px bg-black/10 dark:bg-white/10" />
+}
+
+function DividerLine() {
+  return <div className="my-1 h-px bg-black/10 dark:bg-white/10" />
 }
 
 function NoteSwatch({ id, dark }) {
@@ -688,6 +748,50 @@ function GearIcon() {
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.2" />
       <path d="M8 1.8v1.6M8 12.6v1.6M2.4 8H1M15 8h-1.4M3.9 3.9l1.1 1.1M11 11l1.1 1.1M12.1 3.9 11 5M5 11l-1.1 1.1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function LibraryIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <path d="M3 2.5h6.5A2.5 2.5 0 0 1 12 5v8.5H5.2A2.2 2.2 0 0 1 3 11.3V2.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+      <path d="M5.2 11.2H12M5.2 5.3h4.6M5.2 7.5h3.3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function PreviewIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <path d="M2 8s2.1-4 6-4 6 4 6 4-2.1 4-6 4-6-4-6-4Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+      <circle cx="8" cy="8" r="1.8" stroke="currentColor" strokeWidth="1.2" />
+    </svg>
+  )
+}
+
+function SearchIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <circle cx="7" cy="7" r="4.1" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M10.1 10.1 13.2 13.2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function MarkdownIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="3.5" width="12" height="9" rx="1.4" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M4.5 10V6.2L6.3 8.4l1.8-2.2V10M10.5 6v4M9.2 8.7l1.3 1.3 1.3-1.3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function HtmlIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <path d="M6.3 4.5 3 8l3.3 3.5M9.7 4.5 13 8l-3.3 3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
