@@ -1,5 +1,10 @@
 node_modules
 dist
 release
+.npm-cache
+.electron-cache
+.electron-builder-cache
+.vite-cache
+.chrome-profile*
 .DS_Store
 *.log

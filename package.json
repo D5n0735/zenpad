@@ -1,25 +1,25 @@
 {
   "name": "zenpad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A beautiful glassmorphism notepad for long-form writing",
   "author": "ZenPad",
   "main": "electron/main.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k \"vite\" \"wait-on tcp:5173 && cross-env NODE_ENV=development electron .\"",
-    "dev:web": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "dist": "vite build && electron-builder",
-    "dist:win": "vite build && electron-builder --win"
+    "dev": "concurrently -k \"vite --configLoader runner\" \"wait-on tcp:5173 && cross-env NODE_ENV=development electron .\"",
+    "dev:web": "vite --configLoader runner",
+    "build": "vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner",
+    "dist": "vite build --configLoader runner && electron-builder",
+    "dist:win": "vite build --configLoader runner && electron-builder --win"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
-    "electron": "^33.2.1",
-    "electron-builder": "^25.1.8",
+    "electron": "^43.4.0",
+    "electron-builder": "^26.15.3",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.3",
@@ -47,6 +47,7 @@
     "appId": "com.zenpad.app",
     "productName": "ZenPad",
     "artifactName": "${productName} Setup ${version}.${ext}",
+    "electronDist": "node_modules/electron/dist",
     "directories": {
       "output": "release"
     },

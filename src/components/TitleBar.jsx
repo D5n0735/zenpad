@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 
 const hasApi = typeof window !== 'undefined' && window.api
 
-export default function TitleBar({ title, dirty, onRename }) {
+export default function TitleBar({ title, dirty, onRename, onClose }) {
   const [maximized, setMaximized] = useState(false)
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(title)
@@ -26,7 +26,10 @@ export default function TitleBar({ title, dirty, onRename }) {
   }, [editing])
 
   const minimize = () => hasApi && window.api.minimize()
-  const close = () => hasApi && window.api.close()
+  const close = () => {
+    if (onClose) onClose()
+    else if (hasApi) window.api.close()
+  }
   const toggle = async () => {
     if (!hasApi) return
     const next = await window.api.toggleMaximize()
@@ -37,9 +40,9 @@ export default function TitleBar({ title, dirty, onRename }) {
     setDraft(title)
     setEditing(true)
   }
-  const commit = () => {
+  const commit = async () => {
     const name = draft.trim()
-    if (name && onRename) onRename(name)
+    if (name && onRename) await onRename(name)
     setEditing(false)
   }
   const cancel = () => {
